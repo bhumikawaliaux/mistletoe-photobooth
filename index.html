@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>mistletoe photobooth</title>
+  <meta name="theme-color" content="#5E1415" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Wallpaper: solid red + lights pinned top + trees pinned bottom (always fully visible) -->
+  <div class="band band--lights" aria-hidden="true"></div>
+  <div class="band band--trees" aria-hidden="true"></div>
+
+  <!-- ============ BOOTH SCENE ============ -->
+  <main id="booth" class="scene scene--booth">
+    <section class="intro">
+      <p class="eyebrow">mistletoe photobooth</p>
+      <svg class="star" viewBox="0 0 100 100" aria-hidden="true"><path d="M50 4c3 0 5 2 6.4 5.2l9.7 21.4 23.3 2.6c7 .8 8.6 6.4 3.5 11L75.3 60.4l5 23c1.5 6.9-3.3 10.4-9.3 6.9L50 78.2 29 90.3c-6 3.5-10.8 0-9.3-6.9l5-23L7.1 44.2c-5.1-4.6-3.5-10.2 3.5-11l23.3-2.6 9.7-21.4C45 6 47 4 50 4z"/></svg>
+      <h1 class="headline"><span>8 poses</span><span>1 song</span><span>2 strips</span></h1>
+      <p class="explainer">One photo every few beats of the song. The bar under the camera fills up, and the flash goes off when it's full.</p>
+
+      <ol class="squares" id="squares" aria-label="Photos taken"></ol>
+
+      <div class="pills" role="radiogroup" aria-label="Filter" id="filters"></div>
+
+      <div class="actions">
+        <button class="btn btn--primary" id="startBtn">start ↘</button>
+        <button class="btn btn--ghost" id="muteBtn" aria-pressed="false">♪ music on</button>
+        <button class="btn btn--ghost" id="editBtn" type="button">✎ edit lines</button>
+      </div>
+      <p class="privacy">Your photos never leave your device.</p>
+    </section>
+
+    <section class="camera-col">
+      <div class="frame-wrap" id="frameWrap">
+        <div class="opening">
+          <video id="video" playsinline muted autoplay></video>
+          <div class="placeholder" id="placeholder">camera turns on<br />when you press start</div>
+          <div class="countdown" id="countdown" aria-live="assertive"></div>
+          <div class="counter" id="counter"></div>
+          <div class="now" id="nowPlaying"></div>
+          <div class="flash" id="flash"></div>
+        </div>
+        <img class="frame-img" src="assets/frame.png" alt="" draggable="false" />
+      </div>
+      <div class="under">
+        <p class="caption" id="caption">&nbsp;</p>
+        <div class="bar"><div class="bar__fill" id="barFill"></div></div>
+      </div>
+      <p class="error" id="error" role="alert" hidden></p>
+    </section>
+  </main>
+
+  <!-- ============ PRINT SCENE ============ -->
+  <main id="print" class="scene scene--print" hidden>
+    <div class="printer">
+      <div class="printer__bar">
+        <span class="screw"></span>
+        <span class="printer__brand">mistletoe</span>
+        <span class="printer__slot"></span>
+        <span class="printer__led" id="led"></span>
+        <span class="screw"></span>
+      </div>
+      <div class="rack">
+        <span class="rail rail--l"></span>
+        <span class="rail rail--r"></span>
+        <div class="strips" id="strips"></div>
+        <div class="ledge"></div>
+      </div>
+    </div>
+    <div class="print-actions" id="printActions">
+      <button class="btn btn--primary" id="downloadBtn">save strips ↓</button>
+      <button class="btn btn--ghost" id="againBtn">take again ↺</button>
+    </div>
+  </main>
+
+  <!-- YouTube needs a visible player (min 200×200 per its terms) -->
+  <div class="radio" id="radio" hidden>
+    <div id="yt"></div>
+  </div>
+
+  <div class="mark" id="mark" hidden></div>
+
+  <!-- Edit panel: lines + timing, saved in this browser -->
+  <div class="editor" id="editor" hidden role="dialog" aria-label="Edit lines">
+    <div class="editor__card">
+      <h2>Lines under the camera</h2>
+      <p class="editor__hint">One line per photo. Paste or type them in. Empty boxes show the pose prompt instead. Saves automatically.</p>
+      <ol class="editor__list" id="editorList"></ol>
+      <h2>Timing</h2>
+      <p class="editor__hint" id="timingStatus"></p>
+      <div class="editor__row">
+        <button class="btn btn--primary" id="markBtn" type="button">♪ tap to set timing</button>
+        <button class="btn btn--ghost" id="resetTimesBtn" type="button">use every 3 s</button>
+      </div>
+      <div class="editor__tap" id="tapArea" hidden>
+        <p id="tapText">Song is playing. Tap the big button (or press space) the moment each line starts.</p>
+        <button class="tap-btn" id="tapBtn" type="button">tap</button>
+      </div>
+      <div class="editor__row editor__row--end">
+        <button class="btn btn--primary" id="closeEditor" type="button">done</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
