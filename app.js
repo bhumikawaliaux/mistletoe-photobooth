@@ -208,8 +208,9 @@
     counterEl.textContent = `${shotIdx + 1}/${C.shots}`;
     if (player.started && C.nowPlaying) nowEl.textContent = "♪ " + C.nowPlaying;
     captionEl.textContent = (C.lyrics && C.lyrics[shotIdx]) || C.prompts[shotIdx] || "";
-    // 3-2-1 before the first photo
-    if (shotIdx === 0 && left > 0 && left <= 3) setCountdown(Math.ceil(left));
+        // countdown before every photo (3-2-1, or 2-1 when shots are closer together)
+    const maxCount = Math.max(1, Math.min(3, Math.floor(target - prev)));
+    if (left > 0 && left <= maxCount) setCountdown(Math.ceil(left));
     if (left <= 0) {
       setCountdown("");
       capture(shotIdx);

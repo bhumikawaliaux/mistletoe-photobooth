@@ -214,7 +214,8 @@ body {
   .headline span + span::before { content: " "; }
 .explainer { max-width: 340px; }
   .pills, .actions { justify-content: center; }
-  .radio { left: auto; right: 10px; }
+  /* YouTube requires its player to be at least 200×200, so on phones it sits as low as possible, over the trees */
+  .radio { left: auto; right: 8px; bottom: calc(8px + env(safe-area-inset-bottom)); border-width: 1.5px; border-radius: 10px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .countdown.pop, .flash.go { animation-duration: .01s; }
