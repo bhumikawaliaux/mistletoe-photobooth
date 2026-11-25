@@ -71,7 +71,7 @@
       window.onYouTubeIframeAPIReady = () => {
         this.yt = new YT.Player("yt", {
           width: 200, height: 200, videoId: C.music.youtubeId,
-          playerVars: { playsinline: 1, rel: 0, controls: 1, modestbranding: 1, start: Math.floor(C.music.startAt) },
+          playerVars: { playsinline: 1, rel: 0, controls: 1, modestbranding: 1, start: Math.floor(C.music.startAt), end: Math.ceil(C.music.endAt || 0) || undefined },
           events: {
             onReady: () => { this.ready = true; this.yt.setVolume(C.music.volume); },
             onStateChange: (e) => {
@@ -92,7 +92,17 @@
       this.yt.seekTo(C.music.startAt, true);
       this.yt.setVolume(C.music.volume);
       this.yt.playVideo();
+      this.watchEnd();
       return true;
+    },
+    watchEnd() {
+      clearInterval(this.endTimer);
+      if (!C.music.endAt) return;
+      const stopAfter = C.music.endAt - C.music.startAt;
+      this.endTimer = setInterval(() => {
+        const t = this.time();
+        if (t != null && t >= stopAfter - 0.6) { clearInterval(this.endTimer); this.fadeOut(600); }
+      }, 100);
     },
     time() { try { return this.yt.getCurrentTime() - C.music.startAt; } catch { return null; } },
     isPlaying() { try { return this.yt.getPlayerState() === YT.PlayerState.PLAYING; } catch { return false; } },

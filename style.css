@@ -209,7 +209,7 @@ body {
   .eyebrow { margin-bottom: 6px; }
   .headline { font-size: clamp(26px, 7.4vw, 48px); margin-bottom: 12px; }
   .headline span { display: inline; }
-  .headline span + span::before { content: " · "; }
+  .headline span + span::before { content: " "; }
   .explainer { max-width: 340px; }
   .pills, .actions { justify-content: center; }
   .radio { left: auto; right: 10px; }

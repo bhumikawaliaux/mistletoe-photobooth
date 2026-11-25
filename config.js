@@ -6,7 +6,8 @@ window.BOOTH_CONFIG = {
   music: {
     enabled: true,
     youtubeId: "E8gmARGvPlI", // Wham! – Last Christmas (official video)
-    startAt: 0,               // second in the video where the session begins
+    startAt: 71,              // 1:11 — where the session begins
+    endAt: 90,                // 1:30 — music stops here
     volume: 80,
   },
 
@@ -15,7 +16,7 @@ window.BOOTH_CONFIG = {
   // To get exact times: open the site with ?mark at the end of the URL,
   // press space on every half-line, and paste the printed list here.
   shotTimes: null,          // e.g. [3.1, 5.4, 7.6, 9.9, 12.2, 14.4, 16.7, 18.9]
-  interval: 3,              // seconds between shots when shotTimes is null
+  interval: 2.35,           // seconds between shots when shotTimes is null (8 shots fit in 1:11–1:30)
   shots: 8,
 
   // Text shown under the camera for each shot
