@@ -27,7 +27,7 @@
 
   // ---------- elements ----------
   const video = $("video"), squares = $("squares"), filtersEl = $("filters");
-  const startBtn = $("startBtn"), muteBtn = $("muteBtn");
+  const startBtn = $("startBtn");
   const countdownEl = $("countdown"), counterEl = $("counter"), flashEl = $("flash");
   const captionEl = $("caption"), barFill = $("barFill"), errorEl = $("error"), placeholder = $("placeholder");
   const boothScene = $("booth"), printScene = $("print"), stripsEl = $("strips"), led = $("led");
@@ -52,10 +52,6 @@
   });
   video.style.filter = filter.css;
   video.style.transform = "scaleX(-1)";
-  setMuteLabel();
-
-  muteBtn.onclick = () => { musicOn = !musicOn; setMuteLabel(); if (!musicOn) player.pause(); };
-  function setMuteLabel() { muteBtn.textContent = musicOn ? "♪ music on" : "♪ music off"; muteBtn.setAttribute("aria-pressed", String(!musicOn)); }
 
   // ---------- clock: follows the music when it plays, otherwise a plain timer ----------
   const clock = {
@@ -141,18 +137,22 @@
   function showError(msg) { errorEl.textContent = msg; errorEl.hidden = false; }
 
   // ---------- start ----------
-  startBtn.onclick = async () => {
+  // camera turns on as soon as the page opens, so people can see themselves and pick a filter
+  async function initCamera() {
+    startBtn.disabled = true;
+    const ok = await openCamera();
+    startBtn.disabled = false;
+    startBtn.textContent = ok ? "start" : "turn on camera";
+    if (ok) captionEl.textContent = "pick a filter, then press start";
+    else placeholder.textContent = "camera is off";
+  }
+  startBtn.onclick = () => {
     if (MARK_MODE) return startMark();
     if (running) return;
-    if (!stream) {                       // first press: camera on, see yourself
-      startBtn.disabled = true;
-      const ok = await openCamera();
-      startBtn.disabled = false;
-      if (ok) { startBtn.textContent = "ready? start ↘"; captionEl.textContent = "strike a pose when the bar fills"; }
-      return;
-    }
-    startSession();                      // second press (a user gesture, so music may play)
+    if (!stream) return initCamera();
+    startSession();
   };
+  if (!MARK_MODE) initCamera(); else startBtn.disabled = false;
 
   function startSession() {
     running = true; shotIdx = 0; photos = [];
@@ -347,7 +347,7 @@
 
   $("againBtn").onclick = () => {
     printScene.hidden = true; boothScene.hidden = false;
-    resetBooth("ready? start ↘");
+    resetBooth("start");
   };
 
   function resetBooth(btnLabel) {
@@ -358,7 +358,7 @@
     setControls(true); startBtn.textContent = btnLabel;
   }
   function setControls(on) {
-    startBtn.disabled = !on; muteBtn.disabled = !on;
+    startBtn.disabled = !on;
     filtersEl.querySelectorAll(".pill").forEach((p) => (p.disabled = !on));
   }
 
@@ -366,7 +366,7 @@
   document.addEventListener("visibilitychange", () => {
     if (document.hidden && running) {
       player.pause(); radio.hidden = true;
-      resetBooth("ready? start ↘");
+      resetBooth("start");
       showError("Paused because you left the tab. Press start to go again.");
     }
   });
@@ -417,7 +417,15 @@
       : `A photo every ${C.interval} seconds. Tap along to the song to land each flash on its line.`;
   }
   showTiming();
-  $("editBtn").onclick = () => { if (!running) editor.hidden = false; };
+  // private: open with ?edit in the address
+  if (new URLSearchParams(location.search).has("edit")) editor.hidden = false;
+  $("copyConfig").onclick = async () => {
+    const lines = Array.from({ length: C.shots }, (_, i) => C.lyrics[i] || "");
+    const times = Array.isArray(C.shotTimes) ? `[${C.shotTimes.join(", ")}]` : "null";
+    const text = `  lyrics: ${JSON.stringify(lines)},\n  shotTimes: ${times},`;
+    try { await navigator.clipboard.writeText(text); timingStatus.textContent = "Copied. Paste it over the lyrics and shotTimes lines in config.js."; }
+    catch { timingStatus.textContent = text; }
+  };
   $("closeEditor").onclick = () => { stopTap(); editor.hidden = true; };
   $("resetTimesBtn").onclick = () => { stopTap(); C.shotTimes = null; store.set("shotTimes", "interval"); showTiming(); };
 

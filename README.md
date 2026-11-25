@@ -51,3 +51,8 @@ https is required, otherwise phones won't allow the camera.
 - Photos never leave the browser.
 - Music is a YouTube embed and must stay visible (YouTube requires the player to be at least 200×200 px), so it shows as a small card during the session.
 - If music can't autoplay (some phones), the session still runs on the timer and asks you to tap the player.
+
+## Private edit panel
+
+Open the site with `?edit` at the end of the address (e.g. `.../mistletoe-photobooth/?edit`). Visitors never see it.
+Paste your 8 lines, tap along to set the timing, then press **copy for config.js** and paste the result over the `lyrics` and `shotTimes` lines in `config.js` so everyone sees them.

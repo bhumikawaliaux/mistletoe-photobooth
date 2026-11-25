@@ -28,9 +28,7 @@
       <div class="pills" role="radiogroup" aria-label="Filter" id="filters"></div>
 
       <div class="actions">
-        <button class="btn btn--primary" id="startBtn">start ↘</button>
-        <button class="btn btn--ghost" id="muteBtn" aria-pressed="false">♪ music on</button>
-        <button class="btn btn--ghost" id="editBtn" type="button">✎ edit lines</button>
+        <button class="btn btn--primary" id="startBtn" disabled>start</button>
       </div>
       <p class="privacy">Your photos never leave your device.</p>
     </section>
@@ -39,7 +37,7 @@
       <div class="frame-wrap" id="frameWrap">
         <div class="opening">
           <video id="video" playsinline muted autoplay></video>
-          <div class="placeholder" id="placeholder">camera turns on<br />when you press start</div>
+          <div class="placeholder" id="placeholder">turning on your camera…</div>
           <div class="countdown" id="countdown" aria-live="assertive"></div>
           <div class="counter" id="counter"></div>
           <div class="now" id="nowPlaying"></div>
@@ -73,8 +71,8 @@
       </div>
     </div>
     <div class="print-actions" id="printActions">
-      <button class="btn btn--primary" id="downloadBtn">save strips ↓</button>
-      <button class="btn btn--ghost" id="againBtn">take again ↺</button>
+      <button class="btn btn--primary" id="downloadBtn">save strips</button>
+      <button class="btn btn--ghost" id="againBtn">take again</button>
     </div>
   </main>
 
@@ -89,12 +87,12 @@
   <div class="editor" id="editor" hidden role="dialog" aria-label="Edit lines">
     <div class="editor__card">
       <h2>Lines under the camera</h2>
-      <p class="editor__hint">One line per photo. Paste or type them in. Empty boxes show the pose prompt instead. Saves automatically.</p>
+      <p class="editor__hint">Private panel (only opens with ?edit in the address). Lines and timing saved here show only in this browser. To show them to everyone, press "copy for config.js" and paste over the matching lines in config.js.</p>
       <ol class="editor__list" id="editorList"></ol>
       <h2>Timing</h2>
       <p class="editor__hint" id="timingStatus"></p>
       <div class="editor__row">
-        <button class="btn btn--primary" id="markBtn" type="button">♪ tap to set timing</button>
+        <button class="btn btn--primary" id="markBtn" type="button">tap to set timing</button>
         <button class="btn btn--ghost" id="resetTimesBtn" type="button">use every 3 s</button>
       </div>
       <div class="editor__tap" id="tapArea" hidden>
@@ -102,6 +100,7 @@
         <button class="tap-btn" id="tapBtn" type="button">tap</button>
       </div>
       <div class="editor__row editor__row--end">
+        <button class="btn btn--ghost" id="copyConfig" type="button">copy for config.js</button>
         <button class="btn btn--primary" id="closeEditor" type="button">done</button>
       </div>
     </div>
